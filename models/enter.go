@@ -13,7 +13,7 @@ type RemoveRequest struct {
 }
 
 type ESIDRequest struct {
-	ID []uint `json:"id" form:"id" uri:"id"`
+	ID string `json:"id" form:"id" uri:"id"`
 }
 
 type ESIDListRequest struct {

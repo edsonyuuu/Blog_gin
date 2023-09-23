@@ -18,6 +18,66 @@ definitions:
     - images
     - title
     type: object
+  article_api.ArticleRequest:
+    properties:
+      abstract:
+        description: 文章简介
+        type: string
+      banner_id:
+        description: 文章封面id
+        type: integer
+      category:
+        description: 文章分类
+        type: string
+      content:
+        description: 文章内容
+        type: string
+      link:
+        description: 原文链接
+        type: string
+      source:
+        description: 文章来源
+        type: string
+      tags:
+        description: 文章标签
+        items:
+          type: string
+        type: array
+      title:
+        description: 文章标题
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  article_api.CalendarResponse:
+    properties:
+      count:
+        type: integer
+      date:
+        type: string
+    type: object
+  article_api.CategoryResponse:
+    properties:
+      label:
+        description: 标签
+        type: string
+      value:
+        type: string
+    type: object
+  article_api.TagsResponse:
+    properties:
+      article_id_list:
+        items:
+          type: string
+        type: array
+      count:
+        type: integer
+      created_at:
+        type: string
+      tag:
+        type: string
+    type: object
   ctype.ImageType:
     enum:
     - 1
@@ -203,6 +263,71 @@ definitions:
     - rev_user_id
     - send_user_id
     type: object
+  models.ArticleModel:
+    properties:
+      abstract:
+        description: 文章简介
+        type: string
+      banner_id:
+        description: 文章封面id
+        type: integer
+      banner_url:
+        description: 文章封面
+        type: string
+      category:
+        description: 文章分类
+        type: string
+      collects_count:
+        description: 收藏量
+        type: integer
+      comment_count:
+        description: 评论量
+        type: integer
+      content:
+        description: 文章内容
+        type: string
+      created_at:
+        description: 创建时间
+        type: string
+      digg_count:
+        description: 点赞量
+        type: integer
+      id:
+        description: es的id
+        type: string
+      keyword:
+        description: 关键字
+        type: string
+      link:
+        description: 原文链接
+        type: string
+      look_count:
+        description: 浏览量
+        type: integer
+      source:
+        description: 文章来源
+        type: string
+      tags:
+        description: 文章标签
+        items:
+          type: string
+        type: array
+      title:
+        description: 文章标题
+        type: string
+      updated_at:
+        description: 更新时间
+        type: string
+      user_avatar:
+        description: 用户头像
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+      user_nick_name:
+        description: 用户昵称
+        type: string
+    type: object
   models.BannerModel:
     properties:
       created_at:
@@ -224,6 +349,15 @@ definitions:
       path:
         description: 图片路径
         type: string
+    type: object
+  models.ESIDListRequest:
+    properties:
+      id_list:
+        items:
+          type: string
+        type: array
+    required:
+    - id_list
     type: object
   models.MessageModel:
     properties:
@@ -252,6 +386,17 @@ definitions:
         description: 发送人id
         type: integer
       send_user_nick_name:
+        type: string
+    type: object
+  models.PageInfo:
+    properties:
+      key:
+        type: string
+      limit:
+        type: integer
+      page:
+        type: integer
+      sort:
         type: string
     type: object
   models.RemoveRequest:
@@ -522,6 +667,368 @@ paths:
       summary: 更新广告
       tags:
       - 广告管理
+  /api/articles:
+    delete:
+      consumes:
+      - application/json
+      description: 删除文章
+      parameters:
+      - collectionFormat: csv
+        in: query
+        items:
+          type: string
+        name: id_list
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 删除文章
+      tags:
+      - 文章管理
+    get:
+      description: 文章列表
+      parameters:
+      - in: query
+        name: is_user
+        type: boolean
+      - in: query
+        name: key
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: sort
+        type: string
+      - in: query
+        name: tag
+        type: string
+      - description: token
+        in: header
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/res.ListResponse'
+              type: object
+      summary: 文章列表
+      tags:
+      - 文章管理
+    post:
+      consumes:
+      - application/json
+      description: 创建文章
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 文章请求参数
+        in: body
+        name: articleRequest
+        required: true
+        schema:
+          $ref: '#/definitions/article_api.ArticleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 创建文章
+      tags:
+      - 文章管理
+    put:
+      consumes:
+      - application/json
+      description: 修改文章
+      parameters:
+      - description: 文章简介
+        in: query
+        name: abstract
+        type: string
+      - description: 文章封面id
+        in: query
+        name: banner_id
+        type: integer
+      - description: 文章分类
+        in: query
+        name: category
+        type: string
+      - description: 文章内容
+        in: query
+        name: content
+        type: string
+      - in: query
+        name: id
+        type: string
+      - description: 原文链接
+        in: query
+        name: link
+        type: string
+      - description: 文章来源
+        in: query
+        name: source
+        type: string
+      - collectionFormat: csv
+        description: 文章标签
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      - description: 文章标题
+        in: query
+        name: title
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 修改文章
+      tags:
+      - 文章管理
+  /api/articles/{id}:
+    get:
+      description: 文章详情
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.ArticleModel'
+              type: object
+      summary: 文章详情
+      tags:
+      - 文章管理
+  /api/articles/calendar:
+    get:
+      consumes:
+      - application/json
+      description: 获取文章的日历视图，统计每天发布的文章数量
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/article_api.CalendarResponse'
+                  type: array
+              type: object
+      summary: 文章日历视图
+      tags:
+      - 文章管理
+  /api/articles/collects:
+    delete:
+      consumes:
+      - application/json
+      description: 批量取消用户对文章的收藏，更新文章的收藏数
+      parameters:
+      - description: Bearer token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ESIDListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 批量取消文章收藏
+      tags:
+      - 文章管理
+    get:
+      description: 用户收藏的文章列表
+      parameters:
+      - in: query
+        name: key
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: sort
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/res.ListResponse'
+              type: object
+      summary: 用户收藏的文章列表
+      tags:
+      - 文章管理
+    post:
+      consumes:
+      - application/json
+      description: 收藏文章
+      parameters:
+      - description: token
+        in: header
+        name: token
+        type: string
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 收藏文章
+      tags:
+      - 文章管理
+  /api/articles/content/{id}:
+    get:
+      description: 获取文章正文
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 获取文章正文
+      tags:
+      - 文章管理
+  /api/articles/detail:
+    get:
+      description: 根据文章标题查看详情
+      parameters:
+      - in: query
+        name: title
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 根据文章标题查看详情
+      tags:
+      - 文章管理
+  /api/articles/tags:
+    get:
+      consumes:
+      - application/json
+      description: 获取文章的日历视图，统计每天发布的文章数量
+      parameters:
+      - in: query
+        name: key
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/article_api.TagsResponse'
+                  type: array
+              type: object
+      summary: 文章日历视图
+      tags:
+      - 文章管理
+  /api/categories:
+    get:
+      description: 文章分类列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/article_api.CategoryResponse'
+                  type: array
+              type: object
+      summary: 文章分类列表
+      tags:
+      - 文章管理
   /api/email_login:
     post:
       description: 邮箱登录，返回token，用户信息需要从token中解码
@@ -1303,4 +1810,26 @@ paths:
       summary: 获取菜单详情
       tags:
       - 菜单管理
+  /search:
+    get:
+      consumes:
+      - application/json
+      description: 根据关键词进行全文搜索，返回匹配结果和高亮内容
+      parameters:
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.PageInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 全文搜索
+      tags:
+      - 文章管理
 swagger: "2.0"

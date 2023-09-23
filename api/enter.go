@@ -2,6 +2,7 @@ package api
 
 import (
 	"Blog_gin/api/advert_api"
+	"Blog_gin/api/article_api"
 	"Blog_gin/api/images_api"
 	"Blog_gin/api/menu_api"
 	"Blog_gin/api/message_api"
@@ -18,6 +19,7 @@ type ApiGroup struct {
 	AdvertApi   advert_api.AdvertApi
 	MenuApi     menu_api.MenuApi
 	MessageApi  message_api.MessageApi
+	ArticleApi  article_api.ArticleApi
 }
 
 var ApiGroupApp = new(ApiGroup)
