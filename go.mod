@@ -3,6 +3,7 @@ module Blog_gin
 go 1.20
 
 require (
+	github.com/DanPlayer/randomname v1.0.1
 	github.com/JohannesKaufmann/html-to-markdown v1.4.1
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/cc14514/go-geoip2 v0.0.0-20190105051856-0a1854480a11
@@ -13,6 +14,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator/v10 v10.14.0
 	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/gorilla/websocket v1.5.0
 	github.com/liu-cn/json-filter v0.0.0-20230831075446-d9df98ecc2e0
 	github.com/olivere/elastic/v7 v7.0.32
 	github.com/qiniu/go-sdk/v7 v7.17.1

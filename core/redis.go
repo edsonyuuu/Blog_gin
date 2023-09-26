@@ -21,10 +21,11 @@ func ConnectRedisDB(db int) *redis.Client {
 		PoolSize: redisConf.PoolSize, // 连接池大小
 	})
 
-	_, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	_, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	_, err := rdb.Ping().Result()
 	if err != nil {
+		logrus.Errorf("err: %+v\n", err.Error())
 		logrus.Errorf("redis连接失败 %s", redisConf.Addr())
 		return nil
 	}

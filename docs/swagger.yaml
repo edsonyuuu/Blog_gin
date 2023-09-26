@@ -78,6 +78,38 @@ definitions:
       tag:
         type: string
     type: object
+  chat_api.GroupRequest:
+    properties:
+      content:
+        description: 聊天内容
+        type: string
+      msg_type:
+        description: 聊天类型
+        type: integer
+    type: object
+  comment_api.CommentIDRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  comment_api.CommentListRequest:
+    properties:
+      article_id:
+        type: string
+    type: object
+  comment_api.CommentRequest:
+    properties:
+      article_id:
+        type: string
+      content:
+        type: string
+      parent_comment_id:
+        description: 父评论id
+        type: integer
+    required:
+    - article_id
+    - content
+    type: object
   ctype.ImageType:
     enum:
     - 1
@@ -1029,6 +1061,149 @@ paths:
       summary: 文章分类列表
       tags:
       - 文章管理
+  /api/chat_groups:
+    get:
+      description: 群聊接口
+      parameters:
+      - description: 表示多个参数
+        in: body
+        name: data
+        schema:
+          $ref: '#/definitions/chat_api.GroupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 群聊接口 websocket
+      tags:
+      - 聊天管理
+  /api/chat_groups_records:
+    get:
+      description: 群聊聊天记录
+      parameters:
+      - in: query
+        name: key
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/res.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/res.ListResponse'
+              type: object
+      summary: 群聊聊天记录
+      tags:
+      - 聊天管理
+  /api/comments:
+    get:
+      consumes:
+      - application/json
+      description: 查看评论
+      parameters:
+      - description: 评论参数
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/comment_api.CommentListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 查看评论
+      tags:
+      - 评论管理
+    post:
+      consumes:
+      - application/json
+      description: 创建文章评论
+      parameters:
+      - description: 评论参数
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/comment_api.CommentRequest'
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 创建评论
+      tags:
+      - 评论管理
+  /api/comments/{id}:
+    delete:
+      description: 删除评论
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 删除评论
+      tags:
+      - 评论管理
+    get:
+      consumes:
+      - application/json
+      description: 点赞评论
+      parameters:
+      - description: 评论参数
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/comment_api.CommentIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 点赞评论
+      tags:
+      - 评论管理
   /api/email_login:
     post:
       description: 邮箱登录，返回token，用户信息需要从token中解码
@@ -1444,6 +1619,42 @@ paths:
       summary: 用户的消息记录
       tags:
       - 消息管理
+  /api/news/list:
+    post:
+      consumes:
+      - application/json
+      description: 获取新闻列表
+      parameters:
+      - description: ID
+        in: formData
+        name: ID
+        type: string
+      - description: Size
+        in: formData
+        name: Size
+        type: integer
+      - description: 签名密钥
+        in: formData
+        name: signaturekey
+        type: string
+      - description: 版本号
+        in: formData
+        name: version
+        type: string
+      - description: User-Agent
+        in: formData
+        name: User-Agent
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/res.Response'
+      summary: 获取新闻列表
+      tags:
+      - 新闻管理
   /api/qq_login_path:
     get:
       description: 获取qq登录的跳转链接，data就是qq的跳转地址

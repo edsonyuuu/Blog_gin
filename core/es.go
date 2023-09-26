@@ -2,6 +2,7 @@ package core
 
 import (
 	"Blog_gin/global"
+	"fmt"
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
 )
@@ -17,5 +18,6 @@ func EsConnect() *elastic.Client {
 	if err != nil {
 		logrus.Fatalf("es连接失败%s", err.Error())
 	}
+	fmt.Println("es连接成功")
 	return c
 }

@@ -42,11 +42,11 @@ func InitRouter() *gin.Engine {
 	//文章点赞
 
 	//评论管理
-
+	routerGroupApp.CommentRouter()
 	//新闻管理
-
+	routerGroupApp.NewsRouter()
 	//聊天管理
-
+	routerGroupApp.ChatRouter()
 	//日志管理
 
 	//数据管理

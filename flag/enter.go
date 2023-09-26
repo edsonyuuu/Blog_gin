@@ -13,6 +13,8 @@ type Option struct {
 	Es   string //es
 }
 
+//go run app.go -u admin
+
 // Parse 解析命令
 func Parse() Option {
 	db := sys_flag.Bool("db", false, "初始化数据库")
