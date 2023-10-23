@@ -30,7 +30,7 @@ func (router RouterGroup) UserRouter() {
 	//用户绑定邮箱
 	router.POST("user_bind_email", middleware.JwtAuth(), app.UserBindEmailView)
 	//用户创建
-	router.POST("users", middleware.JwtAdmin(), app.UserCreateView)
+	router.POST("users", app.UserCreateView)
 	//用户列表
 	router.GET("users", middleware.JwtAuth(), app.UserListView)
 	//用户信息

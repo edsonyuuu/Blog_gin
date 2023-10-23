@@ -40,7 +40,7 @@ func (UserApi) UserBindEmailView(c *gin.Context) {
 	}
 	session := sessions.Default(c)
 	if cr.Code == nil {
-		//第一次后天发送验证码
+		//第一次后台发送验证码
 		//生成四位验证码，将生成的验证码存入session
 		code := random.Code(4)
 		//写入session

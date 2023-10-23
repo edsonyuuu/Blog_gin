@@ -3,13 +3,17 @@ package main
 import (
 	"Blog_gin/core"
 	"Blog_gin/global"
+	"fmt"
 	"gopkg.in/gomail.v2"
 )
 
 func main() {
 	core.InitConf()
 	core.InitLogger()
-	NewCode().Send("1063307044@qq.com", "帅哥你好666")
+	//NewCode().Send("1063307044@qq.com", "帅哥你好666")
+	//NewCode().Send("344754770@qq.com", "帅哥你好666")
+	NewCode().Send("3354847710@qq.com", "帅哥你好666")
+	fmt.Println("验证码已发送")
 }
 
 type Subject string

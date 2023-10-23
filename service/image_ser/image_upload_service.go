@@ -45,7 +45,7 @@ func (ImageService) ImageUploadService(file *multipart.FileHeader) (res FileUplo
 		return
 	}
 
-	//判断文件大小
+	//判断文件大小，按MB来算的
 	size := float64(file.Size) / float64(1024*1024)
 	if size >= float64(global.Config.Upload.Size) {
 		res.Msg = fmt.Sprintf("图片大小超过设定大小，当前大小为:%.2fMB， 设定大小为：%dMB ", size, global.Config.Upload.Size)

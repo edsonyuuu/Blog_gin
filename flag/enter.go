@@ -14,6 +14,7 @@ type Option struct {
 }
 
 //go run app.go -u admin
+//go run app.go -db
 
 // Parse 解析命令
 func Parse() Option {

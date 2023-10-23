@@ -17,6 +17,7 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(global.Config.System.Env)
 	router := gin.Default()
 	router.StaticFS("uploads", http.Dir("uploads"))
+	// swagger  http://localhost/swagger/index.html#/
 	router.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 
 	//路由群

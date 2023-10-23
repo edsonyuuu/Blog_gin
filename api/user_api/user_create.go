@@ -22,11 +22,13 @@ type UserCreateRequest struct {
 // @Tags 用户管理
 // @Accept json
 // @Produce json
-// @Param token header string true "token"
 // @Param data body UserCreateRequest   true "创建用户参数"
 // @Success 200 {object} res.Response{}
 // @Router /api/users [post]
 func (UserApi) UserCreateView(c *gin.Context) {
+
+	//修改注册不需要中间件验证token
+
 	var cr UserCreateRequest
 	if err := c.ShouldBindJSON(&cr); err != nil {
 		res.FailWithError(err, &cr, c)

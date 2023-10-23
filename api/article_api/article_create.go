@@ -50,6 +50,7 @@ func (ArticleApi) ArticleCreateView(c *gin.Context) {
 	userNickName := claims.NickName
 
 	//处理内容content
+	//解析处理Markdown内容的代码
 	unsafe := blackfriday.Run([]byte(cr.Content))
 	//判断是否存在标签
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(string(unsafe)))
