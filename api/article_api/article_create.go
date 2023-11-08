@@ -53,6 +53,7 @@ func (ArticleApi) ArticleCreateView(c *gin.Context) {
 	//解析处理Markdown内容的代码
 	unsafe := blackfriday.Run([]byte(cr.Content))
 	//判断是否存在标签
+	//解析HTML文档，创建一个Document请求对象
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(string(unsafe)))
 	fmt.Println("打印doc.text:", doc.Text())
 	nodes := doc.Find("script").Nodes
@@ -77,7 +78,7 @@ func (ArticleApi) ArticleCreateView(c *gin.Context) {
 		}
 	}
 
-	//不传bannerId后台回传一张
+	//不传bannerId后台会传一张
 	var bannerUrl string
 	err = global.DB.Model(models.BannerModel{}).Where("id = ?", cr.BannerID).Select("path").Scan(&bannerUrl).Error
 	if err != nil {

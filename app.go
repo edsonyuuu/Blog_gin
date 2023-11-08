@@ -27,7 +27,7 @@ func main() {
 	//连接redis
 	global.Redis = core2.ConnectRedis()
 	//连接es
-	//global.ESClient = core2.EsConnect()
+	global.ESClient = core2.EsConnect()
 
 	router := routers.InitRouter()
 
