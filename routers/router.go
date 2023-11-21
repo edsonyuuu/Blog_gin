@@ -41,7 +41,7 @@ func InitRouter() *gin.Engine {
 	//文章管理
 	routerGroupApp.ArticleRouter()
 	//文章点赞
-	routerGroupApp.ArticleRouter()
+	routerGroupApp.DiggRouter()
 	//评论管理
 	routerGroupApp.CommentRouter()
 	//新闻管理

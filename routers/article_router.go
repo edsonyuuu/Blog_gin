@@ -12,7 +12,7 @@ func (router RouterGroup) ArticleRouter() {
 	//查看文章列表
 	router.GET("articles", middleware.JwtAuth(), app.ArticleListView)
 	//查看文章目录
-	router.GET("categories", app.ArticleCategoryListView)
+	router.GET("categorys", app.ArticleCategoryListView)
 	//文章标题详情
 	router.GET("articles/detail", app.ArticleDetailByTitleView)
 	//文章日历列表

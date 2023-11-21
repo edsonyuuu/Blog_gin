@@ -80,6 +80,7 @@ func (a FullTextModel) CreateIndex() error {
 		logrus.Error("创建失败")
 		return err
 	}
+
 	logrus.Infof("索引 %s 创建成功", a.Index())
 	return nil
 }

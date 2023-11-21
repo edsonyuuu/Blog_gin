@@ -22,7 +22,7 @@ type CategoryResponse struct {
 // @Description 文章分类列表
 // @Produce json
 // @Success 200 {object} res.Response{data=[]CategoryResponse}
-// @Router /api/categories [get]
+// @Router /api/categorys [get]
 func (ArticleApi) ArticleCategoryListView(c *gin.Context) {
 
 	type T struct {
